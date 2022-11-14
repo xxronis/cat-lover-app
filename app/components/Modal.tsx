@@ -1,22 +1,65 @@
 import { Dialog } from '@headlessui/react'
-import { Link, useNavigate } from "@remix-run/react"
+import { useNavigate } from "@remix-run/react"
 import { HeartIcon } from '@heroicons/react/24/outline'
 import { BreedImages, Breed, CatImage, Image } from '../types'
-import BreedDetail from './BreedDetail';
+import BreedDetail from './Breed';
 import CatImageDisplay from './CatImageDisplay';
+import FavForm from './FavForm';
+import { addToFavourites } from '~/models/favourites.server';
+import { redirect } from '@remix-run/node';
+import { useState } from 'react';
 
 interface ModalProps {
     catImage?: CatImage;
     breedImages?: BreedImages;
     breedId?: Breed["id"];
 }
+// // const apiKey = process.env.CAT_API_KEY || 'live_EQzBiK2MutfMGJLXfDsNYPGu1PBasljQLGkqmDJnVNUSZeXwRZo6398JdykFs4GL';
+// export const action: ActionFunction = async ({ request, params }) => {
+//   console.log(await request.formData())
+
+//   const formData = await request.formData();
+//   console.log(formData)
+//   const intent = formData.get("intent");
+//   const image_id = formData.get("image_id");
+
+//   // if (intent === 'remove') {
+//   //   await removeFavorite(image_id);
+//   // }
+
+//   if (intent === 'add') {
+//     await addToFavourites({image_id});
+//   }
+
+//   return redirect("/favourites");
+// };
 
 export function Modal({catImage, breedImages, breedId}: ModalProps) {
-  // TODO make navigation conditional so this can be used client-only.
+  const [error, setError] = useState('')
+  const [status, setStatus] = useState('')
+  // TODO make navigation conditional so this can be used client-only as well.
   const navigate = useNavigate()
 
-  const handleFavorite = () => {
-    // ...
+  const handleFavorite = (image_id: string) => {
+    setStatus('Adding to favourites...')
+    return fetch(`https://api.thecatapi.com/v1/favourites`, {
+      method: 'POST',
+      headers: {
+        'x-api-key': 'live_EQzBiK2MutfMGJLXfDsNYPGu1PBasljQLGkqmDJnVNUSZeXwRZo6398JdykFs4GL',
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        image_id: image_id
+      })
+    })
+    .then(response => {
+        if (!response.ok) {
+          return setError('Something went wrong')
+        }
+        navigate('/favourites', { replace: false })
+      })
+    .catch(error => console.log(error))
   }
 
   return (
@@ -25,10 +68,7 @@ export function Modal({catImage, breedImages, breedId}: ModalProps) {
       onClose={() => navigate(catImage ? '/cats' : '/breeds', { replace: false })}
       className="relative z-50"
     >
-      {/* The backdrop, rendered as a fixed sibling to the panel container */}
       <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
-
-      {/* Full-screen container to center the panel */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
         {/* The actual dialog panel  */}
         <Dialog.Panel className="mx-auto max-w-sm rounded bg-white rounded-lg shadow">
@@ -61,14 +101,21 @@ export function Modal({catImage, breedImages, breedId}: ModalProps) {
                   catImage.breeds.map((breed: Breed) => <BreedDetail breed={breed} key={breed.id}/>)
                 }
                 <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
-                    <button className="inline-flex justify-center rounded-md bg-blue-100 px-4 py-2" onClick={() => handleFavorite()}>
-                      <HeartIcon className="h-6 w-6 text-red-500"/>
+                    <button className="inline-flex justify-center rounded-md bg-blue-100 px-4 py-2" onClick={() => handleFavorite(catImage.id)}>
+                      {status !== ''
+                        ? <div className="p-2 text-blue-500 text-sm">{status}</div>
+                        : <HeartIcon className="h-6 w-6 text-red-500"/>
+                      }
                     </button>
                 </div>
+                {error !== '' &&
+                  <div className="p-1 text-red-500">{error}</div>
+                }
+                {/* <FavForm image_id={catImage.id} /> */}
               </>
             }
             {breedImages &&
-              breedImages.map((breedImage: Image) => <CatImageDisplay image={breedImage} origin="breed" key={breedImage.id}/>)
+              breedImages.map((breedImage: Image) => <CatImageDisplay image={breedImage} key={breedImage.id}/>)
             }
         </Dialog.Panel>
       </div>

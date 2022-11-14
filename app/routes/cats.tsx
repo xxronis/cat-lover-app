@@ -20,17 +20,13 @@ export default function CatRoute() {
 
   return (
     <div>
-      <div className="text-center flex items-center p-6 space-x-2">
-        <Link to="/"><HomeIcon className="h-6 w-6"/></Link>
-        <h1> / CATS</h1>
-      </div>
       <main>
         <div className="gap-2 columns-3xs">
         {cats && 
           <ul>
             {cats.map((cat: Image) => (
               <li key={cat.id}>
-                <CatImageDisplay image={cat} origin="cat" />
+                <CatImageDisplay image={cat} />
               </li>
             ))}
           </ul>

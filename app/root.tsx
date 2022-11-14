@@ -1,14 +1,17 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  // ScrollRestoration,
 } from "@remix-run/react";
 import styles from "./tailwind.css";
 import scaffold from "./css/scaffold.css"
+import HomeIcon from "@heroicons/react/24/solid/HomeIcon";
+import { ChevronRightIcon } from "@heroicons/react/24/solid";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -40,6 +43,12 @@ export default function App() {
         <Links />
       </head>
       <body>
+      <div className="text-center flex items-center p-6 space-x-2">
+        <Link to="/"><HomeIcon className="h-6 w-6"/></Link>
+        <Link to="/cats"><span> / CATS</span></Link>
+        <Link to="/breeds"><span> / BREEDS</span></Link>
+        <Link to="/favourites"><span> / MY FAVOURITES</span></Link>
+      </div>
         <Outlet />
         {/* <ScrollRestoration /> */}
         <Scripts />

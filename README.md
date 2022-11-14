@@ -4,7 +4,7 @@
 
 ## Development
 
-node.js version: v16.18.0
+node.js version: v16.18 +
 
 From your terminal:
 
