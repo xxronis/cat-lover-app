@@ -4,9 +4,6 @@ import { HeartIcon } from '@heroicons/react/24/outline'
 import { BreedImages, Breed, CatImage, Image } from '../types'
 import BreedDetail from './Breed';
 import CatImageDisplay from './CatImageDisplay';
-import FavForm from './FavForm';
-import { addToFavourites } from '~/models/favourites.server';
-import { redirect } from '@remix-run/node';
 import { useState } from 'react';
 
 interface ModalProps {
@@ -14,25 +11,6 @@ interface ModalProps {
     breedImages?: BreedImages;
     breedId?: Breed["id"];
 }
-// // const apiKey = process.env.CAT_API_KEY || 'live_EQzBiK2MutfMGJLXfDsNYPGu1PBasljQLGkqmDJnVNUSZeXwRZo6398JdykFs4GL';
-// export const action: ActionFunction = async ({ request, params }) => {
-//   console.log(await request.formData())
-
-//   const formData = await request.formData();
-//   console.log(formData)
-//   const intent = formData.get("intent");
-//   const image_id = formData.get("image_id");
-
-//   // if (intent === 'remove') {
-//   //   await removeFavorite(image_id);
-//   // }
-
-//   if (intent === 'add') {
-//     await addToFavourites({image_id});
-//   }
-
-//   return redirect("/favourites");
-// };
 
 export function Modal({catImage, breedImages, breedId}: ModalProps) {
   const [error, setError] = useState('')
@@ -111,7 +89,6 @@ export function Modal({catImage, breedImages, breedId}: ModalProps) {
                 {error !== '' &&
                   <div className="p-1 text-red-500">{error}</div>
                 }
-                {/* <FavForm image_id={catImage.id} /> */}
               </>
             }
             {breedImages &&

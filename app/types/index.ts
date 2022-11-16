@@ -17,7 +17,7 @@ export type Image = {
   breeds?: [Breed]
 }
 export type Favourite = {
-  id: string;
+  id: number;
   image: Image;
   sub_id?: string;
   user_id?: string;

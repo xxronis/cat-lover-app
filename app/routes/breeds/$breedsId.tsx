@@ -15,3 +15,11 @@ export default function BreedRoute() {
     <Modal breedImages={breedImages} />
   );
 }
+
+export function ErrorBoundary() {
+  return (
+    <div className="error-container text-center flex items-center p-6 space-x-2 bg-red-700 text-white fixed top-60">
+      {`There was an error loading this breed. Sorry.`}
+    </div>
+  );
+}

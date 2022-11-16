@@ -18,7 +18,7 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: scaffold },
 ]
 
-// Start mock on dev mode.
+// Start mock on dev mode. INCOMPLETE
 // if (process.env.NODE_ENV === 'development') {
 //   if (typeof window === "undefined") {
 //     const { server } = require("./mocks/server");
@@ -43,7 +43,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-      <div className="text-center flex items-center p-6 space-x-2">
+      <div className="text-center flex items-center p-6 space-x-2 nav">
         <Link to="/"><HomeIcon className="h-6 w-6"/></Link>
         <Link to="/cats"><span> / CATS</span></Link>
         <Link to="/breeds"><span> / BREEDS</span></Link>
@@ -55,5 +55,13 @@ export default function App() {
         <LiveReload />
       </body>
     </html>
+  );
+}
+
+export function ErrorBoundary() {
+  return (
+    <div className="error-container text-center flex items-center p-6 space-x-2 bg-red-700 text-white fixed top-60">
+      {`Ooops!`}
+    </div>
   );
 }
